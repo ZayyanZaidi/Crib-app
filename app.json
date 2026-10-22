@@ -6,9 +6,8 @@
     "orientation": "portrait",
     "scheme": "crib",
     "userInterfaceStyle": "light",
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+    "web": {
+      "bundler": "metro"
     },
     "ios": {
       "supportsTablet": true
