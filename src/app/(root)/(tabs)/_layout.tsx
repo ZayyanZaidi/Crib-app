@@ -1,28 +1,58 @@
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Tabs } from 'expo-router';
 
 export default function TabsLayout() {
   return (
-    <NativeTabs>
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="house.fill" md="home" />
-      </NativeTabs.Trigger>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#0E4D92',
+        tabBarInactiveTintColor: '#6B7280',
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E5E7EB',
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={color} />
+          ),
+        }}
+      />
 
-      <NativeTabs.Trigger name="search">
-        <NativeTabs.Trigger.Label>Search</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="magnifyingglass" md="search" />
-      </NativeTabs.Trigger>
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'search' : 'search-outline'} size={22} color={color} />
+          ),
+        }}
+      />
 
-      <NativeTabs.Trigger name="saved">
-        <NativeTabs.Trigger.Label>Saved</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="heart.fill" md="favorite" />
-      </NativeTabs.Trigger>
+      <Tabs.Screen
+        name="saved"
+        options={{
+          title: 'Saved',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'heart' : 'heart-outline'} size={22} color={color} />
+          ),
+        }}
+      />
 
-      {/* "profile" is a folder with its own Stack: a stack inside a tab */}
-      <NativeTabs.Trigger name="profile">
-        <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="person.fill" md="person" />
-      </NativeTabs.Trigger>
-    </NativeTabs>
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={22} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }

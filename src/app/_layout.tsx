@@ -25,7 +25,7 @@ function RootNavigator() {
 
   useEffect(() => {
     if (!isLoading) {
-      SplashScreen.hide();
+      SplashScreen.hideAsync();
     }
   }, [isLoading]);
 
@@ -35,15 +35,11 @@ function RootNavigator() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/* Only signed-in users can open the app screens */}
-      <Stack.Protected guard={!!session}>
+      {session ? (
         <Stack.Screen name="(root)" />
-      </Stack.Protected>
-
-      {/* Only signed-out users can open sign in and sign up */}
-      <Stack.Protected guard={!session}>
+      ) : (
         <Stack.Screen name="(auth)" />
-      </Stack.Protected>
+      )}
     </Stack>
   );
 }

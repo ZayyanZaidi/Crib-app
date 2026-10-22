@@ -10,9 +10,8 @@ export default function FiltersScreen() {
   const [selected, setSelected] = useState(params.city ?? '');
 
   function apply() {
-    // Close the modal and go back to Home with the chosen city as a parameter.
-    // An empty string means "All cities", so Home gets no city at all.
-    router.dismissTo({ pathname: '/', params: selected ? { city: selected } : {} });
+    // Close the modal and navigate to Home with the chosen city as a parameter.
+    router.navigate({ pathname: '/', params: selected ? { city: selected } : {} });
   }
 
   return (

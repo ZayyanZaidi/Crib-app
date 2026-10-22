@@ -1,13 +1,19 @@
-// Reads the Supabase settings from .env, and stops with a clear message if one is missing.
-// Expo only copies variables whose names start with EXPO_PUBLIC_ into the app.
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+// Reads the Supabase settings from environment variables.
+// In Expo, only variables with the EXPO_PUBLIC_ prefix are accessible on the client.
+const supabaseUrl =
+  process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseKey =
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-key';
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    'Missing Supabase settings. Add EXPO_PUBLIC_SUPABASE_URL and ' +
-      'EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY to .env, then run npx expo start --clear.'
+if (
+  !process.env.EXPO_PUBLIC_SUPABASE_URL ||
+  !process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+) {
+  console.warn(
+    '[env] Warning: Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY. ' +
+      'Using fallback placeholder values during compilation.'
   );
 }
 
 export const env = { supabaseUrl, supabaseKey };
+

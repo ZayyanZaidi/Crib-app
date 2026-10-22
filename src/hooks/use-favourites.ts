@@ -35,7 +35,7 @@ export function useToggleFavourite() {
     onMutate: async ({ property, isSaved }) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<Favourite[]>(queryKey);
-      queryClient.setQueryData<Favourite[]>(queryKey, (old = []) =>
+      queryClient.setQueryData<Favourite[]>(queryKey, (old: Favourite[] | undefined = []) =>
         isSaved
           ? old.filter((f) => f.property_id !== property.id)
           : [{ property_id: property.id, properties: property }, ...old]
