@@ -5,13 +5,20 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CITIES } from '@/lib/constants';
 
 export default function FiltersScreen() {
-  // Home sends the current city, so the modal opens with it selected.
-  const params = useLocalSearchParams<{ city?: string }>();
+  // Home sends the current city and sort params, so the modal opens with them selected.
+  const params = useLocalSearchParams<{ city?: string; sortByPrice?: string }>();
   const [selected, setSelected] = useState(params.city ?? '');
+  const [sortByPrice, setSortByPrice] = useState(params.sortByPrice === 'true');
 
   function apply() {
-    // Close the modal and navigate to Home with the chosen city as a parameter.
-    router.navigate({ pathname: '/', params: selected ? { city: selected } : {} });
+    // Close the modal and navigate to Home with the chosen city and sort parameter.
+    router.navigate({
+      pathname: '/',
+      params: {
+        ...(selected ? { city: selected } : { city: '' }),
+        sortByPrice: sortByPrice ? 'true' : 'false',
+      },
+    });
   }
 
   return (
@@ -29,6 +36,20 @@ export default function FiltersScreen() {
             </Text>
           </Pressable>
         ))}
+      </View>
+
+      <Text style={styles.label}>Price</Text>
+      <View style={styles.chips}>
+        <Pressable
+          style={[styles.chip, sortByPrice && styles.chipSelected]}
+          onPress={() => setSortByPrice((prev) => !prev)}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: sortByPrice }}
+        >
+          <Text style={[styles.chipText, sortByPrice && styles.chipTextSelected]}>
+            Price: low to high {sortByPrice ? '✓' : ''}
+          </Text>
+        </Pressable>
       </View>
 
       <Pressable style={styles.apply} onPress={apply}>

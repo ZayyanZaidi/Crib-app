@@ -8,7 +8,7 @@ import type { Favourite, Property } from '@/types/property';
 // Each user has their own list, so the user's id is part of the key.
 function useFavouritesKey() {
   const { session } = useAuth();
-  return ['favourites', session?.user.id];
+  return ['favourites', session?.user?.id];
 }
 
 export function useFavourites() {
@@ -37,8 +37,8 @@ export function useToggleFavourite() {
       const previous = queryClient.getQueryData<Favourite[]>(queryKey);
       queryClient.setQueryData<Favourite[]>(queryKey, (old: Favourite[] | undefined = []) =>
         isSaved
-          ? old.filter((f) => f.property_id !== property.id)
-          : [{ property_id: property.id, properties: property }, ...old]
+          ? old.filter((f) => Number(f.property_id) !== Number(property.id))
+          : [{ property_id: Number(property.id), properties: property }, ...old]
       );
       return { previous }; // handed to onError as "context"
     },

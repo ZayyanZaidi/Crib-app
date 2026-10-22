@@ -1,7 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
 
+import { useFavourites } from '@/hooks/use-favourites';
+
 export default function TabsLayout() {
+  const { data: favourites = [] } = useFavourites();
+  const savedCount = favourites.length;
+
   return (
     <Tabs
       screenOptions={{
@@ -38,6 +43,7 @@ export default function TabsLayout() {
         name="saved"
         options={{
           title: 'Saved',
+          tabBarBadge: savedCount > 0 ? savedCount : undefined,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'heart' : 'heart-outline'} size={22} color={color} />
           ),

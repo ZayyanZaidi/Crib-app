@@ -19,8 +19,11 @@ import { EmptyView, ErrorView, LoadingView } from '@/components/state-views';
 import { useProperties } from '@/hooks/use-properties';
 
 export default function HomeScreen() {
-  // The filters modal sends the chosen city back as a URL parameter.
-  const { city } = useLocalSearchParams<{ city?: string }>();
+  // The filters modal or search tab sends the chosen city and sort parameter.
+  const { city, sortByPrice } = useLocalSearchParams<{ city?: string; sortByPrice?: string }>();
+  const isPriceSorted = sortByPrice === 'true';
+  const hasCity = Boolean(city && city.trim());
+  const activeCity = hasCity ? city!.trim() : undefined;
 
   const {
     data,
@@ -31,7 +34,7 @@ export default function HomeScreen() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useProperties(city);
+  } = useProperties(activeCity, isPriceSorted);
 
   // data.pages is a list of pages; flat() joins them into one list of homes.
   const properties = data?.pages.flat() ?? [];
@@ -80,16 +83,24 @@ export default function HomeScreen() {
         <Text style={styles.heading}>Find your next home</Text>
         <Pressable
           style={styles.filterButton}
-          onPress={() => router.push({ pathname: '/filters', params: city ? { city } : {} })}
+          onPress={() =>
+            router.push({
+              pathname: '/filters',
+              params: {
+                ...(activeCity ? { city: activeCity } : {}),
+                ...(isPriceSorted ? { sortByPrice: 'true' } : {}),
+              },
+            })
+          }
         >
           <Text style={styles.filterText}>Filters</Text>
         </Pressable>
       </View>
 
-      {city ? (
+      {hasCity ? (
         <View style={styles.activeFilter}>
-          <Text style={styles.activeFilterText}>Showing homes in {city}</Text>
-          <Pressable onPress={() => router.setParams({ city: undefined })}>
+          <Text style={styles.activeFilterText}>Showing homes in {activeCity}</Text>
+          <Pressable onPress={() => router.setParams({ city: '' })}>
             <Text style={styles.clearText}>Clear</Text>
           </Pressable>
         </View>
@@ -116,7 +127,7 @@ export default function HomeScreen() {
           ListEmptyComponent={
             <EmptyView
               title="No homes found"
-              message={city ? `There are no homes in ${city} yet.` : 'Check back soon.'}
+              message={activeCity ? `There are no homes in ${activeCity} yet.` : 'Check back soon.'}
             />
           }
         />

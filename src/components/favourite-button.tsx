@@ -9,7 +9,9 @@ export function FavouriteButton({ property }: { property: Property }) {
   const { data: favourites = [] } = useFavourites();
   const toggle = useToggleFavourite();
 
-  const isSaved = favourites.some((f) => f.property_id === property.id);
+  const isSaved = favourites.some(
+    (f) => Number(f.property_id) === Number(property.id)
+  );
 
   return (
     <Pressable

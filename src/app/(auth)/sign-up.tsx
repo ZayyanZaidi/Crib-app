@@ -15,12 +15,18 @@ import {
 import { supabase } from '@/lib/supabase';
 
 export default function SignUpScreen() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSignUp() {
+    if (!fullName.trim()) {
+      setError('Please enter your full name.');
+      return;
+    }
+
     if (!email.includes('@') || password.length < 6) {
       setError('Enter a valid email and a password of at least 6 characters.');
       return;
@@ -31,11 +37,22 @@ export default function SignUpScreen() {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
+      options: {
+        data: {
+          full_name: fullName.trim(),
+        },
+      },
     });
     setLoading(false);
 
     if (error) {
-      setError(error.message);
+      if (error.message.toLowerCase().includes('rate limit')) {
+        setError(
+          'Email rate limit exceeded. In Supabase Dashboard, disable "Confirm email" (Authentication > Providers > Email) or confirm the user in SQL Editor.'
+        );
+      } else {
+        setError(error.message);
+      }
       return;
     }
 
@@ -55,6 +72,15 @@ export default function SignUpScreen() {
       <View style={styles.form}>
         <Text style={styles.heading}>Create your Crib account</Text>
 
+        <TextInput
+          style={styles.input}
+          placeholder="Full name"
+          placeholderTextColor="#9CA3AF"
+          value={fullName}
+          onChangeText={setFullName}
+          autoCapitalize="words"
+          autoComplete="name"
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
