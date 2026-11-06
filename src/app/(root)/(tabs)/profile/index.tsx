@@ -43,6 +43,13 @@ export default function ProfileScreen() {
         <Text style={styles.email}>{session?.user.email}</Text>
       </View>
 
+      <Link href="/exercises" asChild>
+        <Pressable style={styles.row}>
+          <Text style={styles.rowText}>Exercises</Text>
+          <Text style={styles.rowText}>›</Text>
+        </Pressable>
+      </Link>
+
       <Link href="/profile/settings" asChild>
         <Pressable style={styles.row}>
           <Text style={styles.rowText}>Settings</Text>
